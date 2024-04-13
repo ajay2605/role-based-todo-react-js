@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Custom Tab Extension",
+    "name": "Taska Best version",
     "version": "1.0",
     "chrome_url_overrides": {
       "newtab": "index.html"
