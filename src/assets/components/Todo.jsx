@@ -79,7 +79,7 @@ const Todo = ({ roles, setRoles }) => {
             <input
               className="todo-input"
               type="text"
-              placeholder="Add Task and Press Enter"
+              placeholder="Add Task"
               value={inputTexts[role.id] || ''}
               onChange={(e) => setInputTexts({ ...inputTexts, [role.id]: e.target.value })}
               onKeyPress={(e) => handleKeyPress(e, role.id)}
