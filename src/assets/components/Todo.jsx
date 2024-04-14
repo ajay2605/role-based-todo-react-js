@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './Todo.css';
+import { v4 as uuidv4 } from 'uuid'; // Importing UUID library to generate unique identifiers
 
-const Todo = () => {
+
+const Todo = ({ roles }) => {
   const [todos, setTodos] = useState([]);
-  const [inputText, setInputText] = useState('');
+  const [inputTexts, setInputTexts] = useState({});
 
   // Load todos from local storage on component mount
   useEffect(() => {
@@ -17,10 +19,23 @@ const Todo = () => {
   }, [todos]);
 
   // Function to handle adding a new todo
-  const handleAddTodo = () => {
-    if (inputText.trim() !== '') {
-      setTodos([...todos, { id: Date.now(), text: inputText, completed: false }]);
-      setInputText('');
+  const handleAddTodo = (roleId) => {
+    if (inputTexts[roleId] && inputTexts[roleId].trim() !== '') {
+      const newTodo = {
+        id: uuidv4(), // Generate unique identifier for todo
+        text: inputTexts[roleId],
+        completed: false,
+        roleId: roleId // Store the roleId associated with the todo
+      };
+      setTodos([...todos, newTodo]);
+      setInputTexts({...inputTexts, [roleId]: ''}); // Clear the input text after adding todo
+    }
+  };
+
+  // Handle Enter key in the input field
+  const handleKeyPress = (e, roleId) => {
+    if (e.key === 'Enter') {
+      handleAddTodo(roleId);
     }
   };
 
@@ -38,33 +53,41 @@ const Todo = () => {
 
   return (
     <div className="todo-container">
-      <h1>Todo List</h1>
-      <input 
-        className="todo-input"
-        type="text" 
-        placeholder="Enter your todo..." 
-        value={inputText} 
-        onChange={(e) => setInputText(e.target.value)} 
-      />
-      <button className="todo-button" onClick={handleAddTodo}>Add Todo</button>
-      <ul className="todo-list">
-        {todos.map(todo => (
-          <li key={todo.id} className="todo-item">
+      {roles.map(role => (
+        <div key={role.id} className='todo-component'>
+          <h3>{role.name}</h3>
+          <div className='input-button-component'>
             <input 
-              className="todo-checkbox"
-              type="checkbox" 
-              checked={todo.completed} 
-              onChange={() => handleToggleComplete(todo.id)} 
+              className="todo-input"
+              type="text" 
+              placeholder="Add Task and Press Enter" 
+              value={inputTexts[role.id] || ''} 
+              onChange={(e) => setInputTexts({...inputTexts, [role.id]: e.target.value})} 
+              onKeyPress={(e) => handleKeyPress(e, role.id)}
             />
-            <span id="span-id" className={`todo-text ${todo.completed ? 'completed' : ''}`}>
-              {todo.text}
-            </span>
-            <button className="todo-button" onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+            {/* <button className="todo-button" onClick={() => handleAddTodo(role.id)}>Add Todo</button> */}
+          </div>
+          <ul className="todo-list">
+            {todos.filter(todo => todo.roleId === role.id).map(todo => (
+              <li key={todo.id} className="todo-item">
+                <input 
+                  className="todo-checkbox"
+                  type="checkbox" 
+                  checked={todo.completed} 
+                  onChange={() => handleToggleComplete(todo.id)} 
+                />
+                <span className={`todo-text ${todo.completed ? 'completed' : ''}`}>
+                  {todo.text}
+                </span>
+                <button className="todo-button" onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 };
 
 export default Todo;
+
