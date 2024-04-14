@@ -95,10 +95,10 @@ const Todo = ({ roles, setRoles }) => {
                   checked={todo.completed}
                   onChange={() => handleToggleComplete(todo.id)}
                 />
-                <span className={`todo-text ${todo.completed ? 'completed' : ''}`}>
+                <span id="span-id" className={`todo-text ${todo.completed ? 'completed' : ''}`} >
                   {todo.text}
                 </span>
-                <button className="todo-button" onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+                <button className="delete-button" onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
               </li>
             ))}
           </ul>
