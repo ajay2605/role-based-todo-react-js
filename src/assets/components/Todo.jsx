@@ -3,7 +3,7 @@ import './Todo.css';
 import { v4 as uuidv4 } from 'uuid'; // Importing UUID library to generate unique identifiers
 
 
-const Todo = ({ roles }) => {
+const Todo = ({ roles, setRoles }) => {
   const [todos, setTodos] = useState([]);
   const [inputTexts, setInputTexts] = useState({});
 
@@ -28,7 +28,7 @@ const Todo = ({ roles }) => {
         roleId: roleId // Store the roleId associated with the todo
       };
       setTodos([newTodo, ...todos]);
-      setInputTexts({...inputTexts, [roleId]: ''}); // Clear the input text after adding todo
+      setInputTexts({ ...inputTexts, [roleId]: '' }); // Clear the input text after adding todo
     }
   };
 
@@ -41,9 +41,24 @@ const Todo = ({ roles }) => {
 
   // Function to handle marking a todo as complete
   const handleToggleComplete = (id) => {
-    setTodos(todos.map(todo => 
+    setTodos(todos.map(todo =>
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     ).sort((a, b) => a.completed - b.completed));
+  };
+
+  // Function to handle deleting a role and its associated todos
+  const handleDeleteRole = (roleId) => {
+    const updatedRoles = roles.filter(role => role.id !== roleId);
+    setRoles(updatedRoles);
+
+    // Filter out the todos associated with the roleId
+    const updatedTodos = todos.filter(todo => todo.roleId !== roleId);
+    setTodos(updatedTodos);
+
+    // Remove the roleId from the inputTexts state
+    const updatedInputTexts = { ...inputTexts };
+    delete updatedInputTexts[roleId];
+    setInputTexts(updatedInputTexts);
   };
 
   // Function to handle deleting a todo
@@ -55,14 +70,18 @@ const Todo = ({ roles }) => {
     <div className="todo-container">
       {roles.map(role => (
         <div key={role.id} className='todo-component'>
-          <h3>{role.name}</h3>
+          <div className='heading-component'>
+
+            <h3>{role.name}</h3>
+            {/* <button onClick={() => handleDeleteRole(role.id)}>Delete Role</button> */}
+          </div>
           <div className='input-button-component'>
-            <input 
+            <input
               className="todo-input"
-              type="text" 
-              placeholder="Add Task and Press Enter" 
-              value={inputTexts[role.id] || ''} 
-              onChange={(e) => setInputTexts({...inputTexts, [role.id]: e.target.value})} 
+              type="text"
+              placeholder="Add Task and Press Enter"
+              value={inputTexts[role.id] || ''}
+              onChange={(e) => setInputTexts({ ...inputTexts, [role.id]: e.target.value })}
               onKeyPress={(e) => handleKeyPress(e, role.id)}
             />
             <button className="todo-button" onClick={() => handleAddTodo(role.id)}>Add Todo</button>
@@ -70,11 +89,11 @@ const Todo = ({ roles }) => {
           <ul className="todo-list">
             {todos.filter(todo => todo.roleId === role.id).map(todo => (
               <li key={todo.id} className="todo-item">
-                <input 
+                <input
                   className="todo-checkbox"
-                  type="checkbox" 
-                  checked={todo.completed} 
-                  onChange={() => handleToggleComplete(todo.id)} 
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() => handleToggleComplete(todo.id)}
                 />
                 <span className={`todo-text ${todo.completed ? 'completed' : ''}`}>
                   {todo.text}
