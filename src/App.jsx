@@ -28,15 +28,15 @@ function App() {
     }
   };
 
-  const handleListAllItems = () => {
+  // const handleListAllItems = () => {
     
-  }
+  // }
 
   return (
     <>
       <div className="header-container">
         <button type="button" className="add-role-component" onClick={handleAddRoleClick}>Add Role</button>
-        <button className="list-all-items" onClick={handleListAllItems}>List Items</button>
+        {/* <button className="list-all-items" onClick={handleListAllItems}>List Items</button> */}
       </div>
       <Todo roles={roles} />
     </>

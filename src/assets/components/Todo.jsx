@@ -27,7 +27,7 @@ const Todo = ({ roles }) => {
         completed: false,
         roleId: roleId // Store the roleId associated with the todo
       };
-      setTodos([...todos, newTodo]);
+      setTodos([newTodo, ...todos]);
       setInputTexts({...inputTexts, [roleId]: ''}); // Clear the input text after adding todo
     }
   };
@@ -65,7 +65,7 @@ const Todo = ({ roles }) => {
               onChange={(e) => setInputTexts({...inputTexts, [role.id]: e.target.value})} 
               onKeyPress={(e) => handleKeyPress(e, role.id)}
             />
-            {/* <button className="todo-button" onClick={() => handleAddTodo(role.id)}>Add Todo</button> */}
+            <button className="todo-button" onClick={() => handleAddTodo(role.id)}>Add Todo</button>
           </div>
           <ul className="todo-list">
             {todos.filter(todo => todo.roleId === role.id).map(todo => (
