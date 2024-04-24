@@ -3,6 +3,7 @@ import Todo from './components/Todo';
 
 function App() {
   const [roles, setRoles] = useState([]);
+  const [todoVisible, setTodoVisible] = useState(false); // State to manage visibility
 
   // Load roles from local storage on component mount
   useEffect(() => {
@@ -19,27 +20,28 @@ function App() {
     const roleName = prompt("Please enter the name for the new role:", "Role Name");
     if (roleName) { // Check if a name was entered
       setRoles(prevRoles => [
-        ...prevRoles, 
-        { 
-          id: prevRoles.length + 1, 
+        ...prevRoles,
+        {
+          id: prevRoles.length + 1,
           name: roleName  // Use the entered name
         }
       ]);
     }
   };
 
-  // const handleListAllItems = () => {
-    
-  // }
+  const handleToggleTodoVisibility = () => {
+    setTodoVisible(prevVisible => !prevVisible); // Toggle visibility
+  };
 
   return (
     <>
-      <div className="header-container"
-      >
+      <div className="header-container">
         <button type="button" className="add-role-component" onClick={handleAddRoleClick}>Add Role</button>
-        {/* <button className="list-all-items" onClick={handleListAllItems}>List Items</button> */}
+        <button type="button" onClick={handleToggleTodoVisibility}>
+          {todoVisible ? "Hide Todo" : "Show Todo"}
+        </button>
       </div>
-      <Todo roles={roles} />
+      {todoVisible && <Todo roles={roles} />} {/* Render Todo only if visible */}
     </>
   );
 }
