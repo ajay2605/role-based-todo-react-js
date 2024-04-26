@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Todo from './components/Todo';
+import { v4 as uuidv4 } from 'uuid'; // Importing UUID library to generate unique identifiers
+
 
 function App() {
   const [roles, setRoles] = useState([]);
@@ -22,7 +24,7 @@ function App() {
       setRoles(prevRoles => [
         ...prevRoles,
         {
-          id: prevRoles.length + 1,
+          id: uuidv4(),
           name: roleName  // Use the entered name
         }
       ]);
@@ -38,7 +40,7 @@ function App() {
       <div className="header-container">
         <button type="button" className="add-role-component" onClick={handleAddRoleClick}>Add Role</button>
         <button type="button" onClick={handleToggleTodoVisibility}>
-          {todoVisible ? "Hide Todo" : "Show Todo"}
+          {todoVisible ? "Hide Roles" : "Show Roles"}
         </button>
       </div>
       {todoVisible && <Todo roles={roles} />} {/* Render Todo only if visible */}
