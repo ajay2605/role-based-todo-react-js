@@ -127,3 +127,33 @@ h2{
   margin: 0px;
 }
 
+.heading-component{
+  display: flex;
+  align-items: center;
+}
+
+.heading-text-container {
+  flex: 1; /* Take up remaining space */
+  overflow-x: hidden; /* Hide horizontal overflow */
+  white-space: nowrap; /* Prevent text wrapping */
+  text-overflow: ellipsis; /* Show ellipsis (...) for overflowed text */
+}
+
+.heading-component h3{
+  margin-left: 10px;
+}
+
+.heading-component button{
+  margin: 10px;
+  margin-right: 5px;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #dc3545;
+  color: white;
+  cursor: pointer;
+}
+
+.heading-component button:hover {
+  background-color: #f1263a;
+}

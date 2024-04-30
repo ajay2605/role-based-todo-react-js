@@ -43,7 +43,7 @@ function App() {
           {todoVisible ? "Hide Roles" : "Show Roles"}
         </button>
       </div>
-      {todoVisible && <Todo roles={roles} />} {/* Render Todo only if visible */}
+      {todoVisible && <Todo roles={roles} setRoles={setRoles}/>} {/* Render Todo only if visible */}
     </>
   );
 }
