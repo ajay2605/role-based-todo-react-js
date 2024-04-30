@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Todo.css";
 import { v4 as uuidv4 } from "uuid"; // Importing UUID library to generate unique identifiers
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+
 
 const Todo = ({ roles, setRoles }) => {
   const [todos, setTodos] = useState([]);
@@ -88,7 +91,7 @@ const Todo = ({ roles, setRoles }) => {
               <h3>{role.name}</h3>
             </div>
             <button onClick={() => handleDeleteRole(role.id)}>
-              Delete Role
+            <FontAwesomeIcon icon={faTrashAlt} />
             </button>
           </div>
           <div className="input-button-component">
