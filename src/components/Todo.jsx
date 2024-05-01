@@ -1,47 +1,41 @@
 import React, { useState, useEffect } from "react";
 import "./Todo.css";
-import { v4 as uuidv4 } from "uuid"; // Importing UUID library to generate unique identifiers
+import { v4 as uuidv4 } from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-
+import { faTrashAlt, faStar } from "@fortawesome/free-solid-svg-icons";
 
 const Todo = ({ roles, setRoles }) => {
   const [todos, setTodos] = useState([]);
   const [inputTexts, setInputTexts] = useState({});
 
-  // Load todos from local storage on component mount
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos")) || [];
     setTodos(storedTodos);
   }, []);
 
-  // Save todos to local storage whenever todos state changes
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  // Function to handle adding a new todo
   const handleAddTodo = (roleId) => {
     if (inputTexts[roleId] && inputTexts[roleId].trim() !== "") {
       const newTodo = {
-        id: uuidv4(), // Generate unique identifier for todo
+        id: uuidv4(),
         text: inputTexts[roleId],
         completed: false,
-        roleId: roleId, // Store the roleId associated with the todo
+        roleId: roleId,
       };
       setTodos([newTodo, ...todos]);
-      setInputTexts({ ...inputTexts, [roleId]: "" }); // Clear the input text after adding todo
+      setInputTexts({ ...inputTexts, [roleId]: "" });
     }
   };
 
-  // Handle Enter key in the input field
   const handleKeyPress = (e, roleId) => {
     if (e.key === "Enter") {
       handleAddTodo(roleId);
     }
   };
 
-  // Function to handle marking a todo as complete
   const handleToggleComplete = (id) => {
     setTodos(
       todos
@@ -53,22 +47,17 @@ const Todo = ({ roles, setRoles }) => {
   };
 
   const handleDeleteRole = (roleId) => {
-    // Prompt the user before deletion
     const confirmDelete = window.confirm(
       "Are you sure you want to delete the role and associated todos?"
     );
 
-    // If user confirms deletion
     if (confirmDelete) {
-      // Filter out the roles except the one being deleted
       const updatedRoles = roles.filter((role) => role.id !== roleId);
       setRoles(updatedRoles);
 
-      // Filter out the todos associated with the roleId being deleted
       const updatedTodos = todos.filter((todo) => todo.roleId !== roleId);
       setTodos(updatedTodos);
 
-      // Remove the roleId from the inputTexts state if present
       const updatedInputTexts = { ...inputTexts };
       if (updatedInputTexts[roleId]) {
         delete updatedInputTexts[roleId];
@@ -77,7 +66,23 @@ const Todo = ({ roles, setRoles }) => {
     }
   };
 
-  // Function to handle deleting a todo
+  const handleMoveRoleToTop = (roleId) => {
+    // Find the clicked role
+    const clickedRole = roles.find(role => role.id === roleId);
+    // Toggle the isFavorited state
+    const updatedRoles = roles.map(role =>
+      role.id === roleId ? { ...role, isFavorited: !clickedRole.isFavorited } : role
+    );
+    // Separate favorited and non-favorited roles
+    const favoritedRoles = updatedRoles.filter(role => role.isFavorited);
+    const nonFavoritedRoles = updatedRoles.filter(role => !role.isFavorited);
+    // Concatenate favorited and non-favorited roles, with favorited roles at the end
+    const reorderedRoles = [ ...favoritedRoles, ...nonFavoritedRoles];
+    setRoles(reorderedRoles);
+  };
+  
+  
+
   const handleDeleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
@@ -90,9 +95,22 @@ const Todo = ({ roles, setRoles }) => {
             <div className="heading-text-container">
               <h3>{role.name}</h3>
             </div>
-            <button onClick={() => handleDeleteRole(role.id)}>
-            <FontAwesomeIcon icon={faTrashAlt} />
-            </button>
+            <div className="button-container">
+              <button
+                class="delete-role"
+                onClick={() => handleDeleteRole(role.id)}
+              >
+                <FontAwesomeIcon icon={faTrashAlt} />
+              </button>
+              <button
+                className={`favourite-role ${
+                  role.isFavorited ? "favorited" : ""
+                }`}
+                onClick={() => handleMoveRoleToTop(role.id)}
+              >
+                <FontAwesomeIcon icon={faStar} />
+              </button>
+            </div>
           </div>
           <div className="input-button-component">
             <input

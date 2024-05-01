@@ -25,7 +25,8 @@ function App() {
         ...prevRoles,
         {
           id: uuidv4(),
-          name: roleName  // Use the entered name
+          name: roleName,
+          isFavorited:false  // Use the entered name
         }
       ]);
     }
