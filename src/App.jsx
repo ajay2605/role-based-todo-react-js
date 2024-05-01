@@ -5,7 +5,8 @@ import "./App.css";
 
 function App() {
   const [roles, setRoles] = useState([]);
-  const [todoVisible, setTodoVisible] = useState(false); 
+  const [todoVisible, setTodoVisible] = useState(false);
+  // const [habitsVisible, setHabitsVisible] = useState(false);
 
   // Load roles from local storage on component mount
   useEffect(() => {
@@ -38,7 +39,15 @@ function App() {
 
   const handleToggleTodoVisibility = () => {
     setTodoVisible((prevVisible) => !prevVisible); // Toggle visibility
-  }; 
+    // setHabitsVisible((previousVisible) => !previousVisible);
+  };
+
+  const handleToggleHabitsVisibility = () => {
+    // setHabitsVisible((prevVisible) => !prevVisible); // Toggle habits visibility
+    console.log('clicked on toggle')
+    
+  };
+
   return (
     <>
       <div className="header-container">
@@ -54,42 +63,46 @@ function App() {
         </button>
       </div>
       <div className="container">
-        <div className="habits-list">
-          {todoVisible && (
-            <>
-              <h3 style={{ textAlign: 'left', marginTop:'10px', color:'#f1263a'}}>Morning</h3>
+       {todoVisible && (
+        <>
+         <div className="habits-list">
+         
+         <div className="toggle-container">
+           <h3 style={{ textAlign: "left", marginTop: "10px", color: "#f1263a" }}>Morning</h3>
+           <button className="toggle-button" onClick={handleToggleHabitsVisibility}>Toggle</button>
+         </div>
+         <ul>
+           <li>Wake Up at 6 AM</li>
+           <li>Drink Water in Squat position</li>
+           <li>Washroom</li>
+           <li>Tai Chi Exercises</li>
+           <li>Bath</li>
+           <li>BreakFast</li>
+           <li>Eat Nuts</li>
+           <li>Go to Office</li>
+         </ul>
 
-              <ul>
-                <li>Wake Up at 6 AM</li>
-                <li>Drink Water in Squat position</li>
-                <li>Washroom</li>
-                <li>Tai Chi Exercises</li>
-                <li>Bath</li>
-                <li>BreakFast</li>
-                <li>Eat Nuts</li>
-                <li>Go to Office</li>
-              </ul>
-
-              <h3 style={{ textAlign: 'left', marginTop:'10px', color:'#f1263a' }}>Office</h3>
-              <ul>
-                <li>Fill your water bottle</li>
-                <li>Automate one test case</li>
-                <li>Work</li>
-                <li>Eat</li>
-                <li>Stretch Regularly</li>
-                <li>Drink Water</li>
-                <li>Work</li>
-              </ul>
-              <h3 style={{ textAlign: 'left', marginTop:'10px', color:'#f1263a' }}>Evening</h3>
-              <ul>
-                <li>Return Home</li>
-                <li>Stretch(Legs)</li>
-                <li>Take Bath</li>
-                <li>Sleep</li>
-              </ul>
-            </>
-          )}
-        </div>
+         <h3 style={{ textAlign: "left", marginTop: "10px", color: "#f1263a" }}>Office</h3>
+         <ul>
+           <li>Fill your water bottle</li>
+           <li>Automate one test case</li>
+           <li>Work</li>
+           <li>Eat</li>
+           <li>Stretch Regularly</li>
+           <li>Drink Water</li>
+           <li>Work</li>
+         </ul>
+         <h3 style={{ textAlign: "left", marginTop: "10px", color: "#f1263a" }}>Evening</h3>
+         <ul>
+           <li>Return Home</li>
+           <li>Stretch(Legs)</li>
+           <li>Take Bath</li>
+           <li>Sleep</li>
+         </ul>
+   
+   </div>
+        </>
+       )}
         <div className="todos-component">
           {todoVisible && <Todo roles={roles} setRoles={setRoles} />}
         </div>
